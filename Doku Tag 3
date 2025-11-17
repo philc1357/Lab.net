@@ -1,1 +1,15 @@
+Windows Server 2022 als Domain Controller für lab.local eingerichtet.
 
+Der DNS-Server wurde automatisch mit installiert und eingerichtet.
+
+OU-Struktur erstellt: LAB-Users, LAB-Admins, LAB-Computers, LAB-ServiceAccounts.
+
+Admin-Benutzer Aaron angelegt und der Gruppe Domänen-Admins hinzugefügt (voller Domänen-Admin-Zugriff).
+
+In der OU LAB-Users zwei Benutzer angelegt: Xenia und Kevin.
+
+Kevin hat bewusst ein schwaches Passwort bekommen, damit später Angriffe möglich sind.
+
+Gruppenrichtlinie (GPO) erstellt, die den Desktop-Hintergrund für alle LAB-Users festlegt, um die GPO-Verteilung zu testen.
+
+Client erfolgreich in die Domäne lab.local aufgenommen erfolgreich als Domänen-Benutzer angemeldet.
