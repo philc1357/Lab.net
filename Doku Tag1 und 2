@@ -1,1 +1,89 @@
+1. Anlage & Architektur (Tag 1 — Plan / Downloads)
+
+Ordnerstruktur (auf Host angelegt):
+
+~/lab/
+  isos/        # alle ISOs
+  vms/         # VM-disks (qcow2)
+  writeups/    # Notizen, Screenshots
+  scripts/     # kleine Hilfsskripte
+
+ISOs gespeichert in: ~/Lab/isos
+
+Subnetz: 10.0.0.0/24
+
+IP-Zuweisung:
+
+win-server = 10.0.0.20/24 (kein Gateway)
+
+win-client = 10.0.0.10/24
+
+kali = 10.0.0.30/24 (kein Gateway)
+
+
+
+
+2) Virt-Manager / libvirt Setup
+
+lab-net im Virt-Manager erstellt: Modus Isoliert, kein NAT, kein DHCP.
+
+libvirt erzeugte intern eine Bridge virbr1.
+
+
+
+
+3) VM-Installation (Tag 2) — Schritte, Entscheidungen & Befehle
+
+Kali Linux (Angreifer)
+
+Ressourcen: 1 CPU, 4 GB RAM, Disk 40 GB (qcow2).
+
+Installation: Graphical install
+
+Netzwerk: während Installation manuell konfiguriert (wegen lab-net ohne DHCP):
+
+Hostname: kali
+Domainname: lab.net
+IP: 10.0.0.30
+Netmask: 255.255.255.0
+
+Nach Installation geprüft mit:
+
+ip a
+ping 10.0.0.10
+
+
+Windows Server (DC-Ziel)
+
+Ressourcen: 1 CPU, 4 GB RAM, Disk 60 GB.
+
+Installation: Windows Server 2022 Standard (Evaluation) Desktop Experience.
+
+Nach Installation: statische IPv4 gesetzt
+
+IP: 10.0.0.20
+Netzmaske: 255.255.255.0
+DNS: 10.0.0.20.
+
+
+Windows Client (Workstation)
+
+Ressourcen: 1 CPU, 4 GB RAM, Disk 40 GB.
+
+IP: 10.0.0.20
+Netzmaske: 255.255.255.0
+DNS: 10.0.0.20
+
+
+
+
+4) Erste Troubleshooting-Schritte (Netzwerk sichtbar machen)
+
+Problem: Einige Hosts sahen sich nicht gegenseitig (Windows ICMP geblockt).
+Gelöste Punkte:
+
+Windows blockiert ICMP:
+- Firewall-Regel für ICMP setzen.
+
+Ergebnis: ping von Kali zu Server/Client funktioniert; ip a zeigte eth0 mit 10.0.0.30.
 
