@@ -1,0 +1,81 @@
+1. Vorbereitung im Active Directory
+
+Ich habe einen Service-Account erstellt (z. B. svc-sql).
+
+Dem Account wurde ein SPN (Service Principal Name) zugewiesen, damit Kerberos dafür TGS-Tickets ausstellen kann.
+
+Der Account bekam extra ein schwaches Passwort, weil ich einen realistischen Angriffsfall simulieren wollte.
+
+
+
+2. Verständnis: Warum Kerberoasting überhaupt funktioniert
+
+Jeder authentifizierte Domänen-Benutzer darf Kerberos-Service-Tickets anfordern.
+
+Diese Tickets werden mit dem Passwort-Hash des Service-Accounts verschlüsselt, nicht mit dem des anfragenden Users.
+
+Dadurch kann ein normaler Benutzer (z. B. Xenia oder Kevin) Tickets anfordern, die indirekt das verschlüsselte Passwort eines Service-Accounts enthalten.
+
+
+
+3. Angriff von der Kali-Maschine
+
+Mit Impacket wurde ein TGS-Ticket für den Service-Account angefordert:
+-> GetUserSPNs hat uns den Kerberos-Hash geliefert.
+
+Das war ein regulärer Kerberos-Vorgang, den jeder normale User machen darf.
+
+
+
+4. Passwort-Cracking des Service-Accounts
+
+Der Hash wurde in eine Datei geschrieben und danach mit Hashcat gecrackt.
+
+Wörterliste: rockyou.txt
+
+Das Passwort wurde erfolgreich gefunden.
+
+
+
+5. Wichtige Erkenntnisse
+
+Kerberoasting funktioniert nur zuverlässig bei schwachen Passwörtern, besonders wenn sie:
+
+- in Wörterlisten vorkommen (auch in leichter Variation)
+
+- häufig verwendet werden
+
+- wenig Entropie haben
+
+
+Selbst wenn ein Passwort nicht exakt so in rockyou.txt steht:
+
+- Hashcat probiert Varianten,
+
+- verändert Groß-/Kleinschreibung,
+
+- nutzt interne Regeln (Mutation Rules),
+
+- testet viele typische Muster.
+
+-> Dadurch wurde auch Password123 gefunden, obwohl es nicht exakt so im Wordlist-File stand.
+
+
+
+6. Sicherheitseinordnung
+
+Das Cracking funktioniert nur, weil das Passwort schwach war.
+
+Ein starkes Passwort (hohe Entropie, zufällig, lang) hätte Hashcat extrem lange beschäftigt oder wäre gar nicht gefunden worden.
+
+Kerberoasting lebt von schlechten Passwörtern im Netzwerk.
+
+
+
+7. Wichtig für die Praxis
+
+Es braucht keine Adminrechte um Kerberoasting auszuführen.
+
+Auch Accounts wie Xenia oder Kevin können es.
+
+Dadurch wird klar, dass schlecht konfigurierte Service-Accounts ein echtes Risiko sind – unabhängig davon, wie viele Admins es gibt.
