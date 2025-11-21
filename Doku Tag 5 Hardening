@@ -1,0 +1,199 @@
+1. Neue professionelle OU-Struktur erstellt
+
+Ich habe mein Active Directory komplett neu strukturiert, damit es dem Aufbau einer realen Unternehmensumgebung entspricht.
+Dazu habe ich unter lab.local folgende Struktur angelegt:
+
+01_Users
+   ├── Admins
+   ├── StandardUsers
+   └── ServiceAccounts
+
+02_Computers
+   ├── Clients
+   ├── Servers
+   └── Templates
+
+03_Policies
+   ├── Security
+   ├── Hardening
+   └── Compliance
+
+Diese Struktur ermöglicht es, Benutzer, Computer und Gruppenrichtlinien sauber voneinander zu trennen und später gezielt zu verwalten.
+
+Danach habe ich die alten LAB-OUs gelöscht (nach Entfernen des Löschschutzes) und alle Benutzer sowie den Client in die neuen OUs verschoben.
+
+
+---
+
+2. Passwort- und Kontorichtlinien für die gesamte Domäne gesetzt
+
+In der Default Domain Policy habe ich die Kontosicherheitsrichtlinien eingerichtet, wie sie in echten Firmen üblich sind:
+
+Mindestkennwortlänge: 10 Zeichen
+
+Passwortgültigkeit: 60 Tage
+
+Kennworthistorie: 10 alte Passwörter merken
+
+Komplexitätsanforderung: aktiviert
+
+Mindestkennwortalter: 1 Tag
+
+Kontosperrung nach 5 Fehlversuchen, Sperrdauer 15 Minuten
+
+
+Damit ist meine komplette Domäne jetzt sicherer gegen Brute-Force, Passwort-Wiederverwendung und generelle Passwortschwäche.
+
+
+---
+
+3. Client-Security-Hardening GPO erstellt
+
+Unter 03_Policies/Hardening habe ich eine neue Gruppenrichtlinie angelegt:
+
+Client-Security-Hardening
+
+Darin habe ich folgende sicherheitsrelevanten Konfigurationen vorgenommen:
+
+a) Lokale Administratorrechte entzogen (Restricted Groups)
+
+Die Gruppe Administrators enthält jetzt nur noch:
+
+Domain Admins
+
+optional meinen Admin-User
+
+
+Standardbenutzer haben keine lokalen Adminrechte mehr.
+
+
+---
+
+b) Windows Firewall vollständig gehärtet
+
+Ich habe die Firewall für alle Profile (Domäne, Privat, Öffentlich) über die erweiterten Firewall-Einstellungen konfiguriert:
+
+Firewall: aktiviert
+
+Eingehende Verbindungen: blockieren
+
+Ausgehende Verbindungen: zulassen
+
+Benutzer dürfen Einstellungen nicht ändern
+
+Firewall ist nicht deaktivierbar
+
+
+Die Firewallprofile arbeiten jetzt zentral gesteuert und unabhängig von lokalen Einstellungen.
+
+
+---
+
+c) ICMP/Ping blockiert
+
+Da ICMP standardmäßig erlaubt ist, habe ich eine eigene eingehende GPO-Firewallregel erstellt:
+
+Regeltyp: Benutzerdefiniert
+
+Protokoll: ICMPv4
+
+Aktion: Blockieren
+
+Profile: Domäne/Privat/Öffentlich
+
+Name: „Block_ICMPv4_Inbound“
+
+
+Nach der Aktualisierung war Ping vollständig geblockt.
+
+
+---
+
+d) RDP sicher konfiguriert
+
+In der GPO habe ich RDP so eingerichtet, wie es in Firmen üblich ist:
+
+RDP erlaubt
+
+Network Level Authentication (NLA) aktiviert
+
+Benutzer ohne Adminrechte dürfen sich NICHT per RDP verbinden
+
+Verbindungen begrenzt
+
+
+
+---
+
+e) PowerShell abgesichert
+
+Ich habe die PowerShell-Execution-Policy auf:
+
+AllSigned
+
+gesetzt.
+Damit können nur noch digital signierte Skripte ausgeführt werden.
+
+
+---
+
+f) Unsichere Konten deaktiviert
+
+Gastkonto deaktiviert
+
+Gastkonto umbenannt
+
+Unsichere LDAP-Bindungen blockiert
+
+SMB-Signing aktiviert
+
+
+
+---
+
+4. GPO-Auswertung & Tests auf dem Windows-Client
+
+Auf dem Client (10.0.0.10) habe ich die Gruppenrichtlinien erzwungen:
+
+gpupdate /force
+
+Danach habe ich mit folgenden Methoden getestet, ob alles korrekt angewendet wurde:
+
+gpresult /r → Hardening-GPO wird erfolgreich angewendet
+
+Get-NetFirewallProfile → Firewallstatus aktiv
+
+Nmap-Scan von Kali → nur die notwendigen Ports (135, 445, ggf. 3389) offen
+
+Ping / ICMP → geblockt
+
+Keine weiteren offenen Ports
+
+
+Damit konnte ich bestätigen, dass meine Hardening-GPO richtig funktioniert.
+
+
+---
+
+🎯 Zusammenfassung
+
+Heute habe ich ein vollständiges, sicheres Blue Team / Systemadministrator-Lab aufgebaut:
+
+Professionelle OU-Struktur
+
+Sichere Passwort- und Kontorichtlinien
+
+Lokale Adminrechte richtig verwaltet
+
+Vollständiges Firewall-Hardening
+
+ICMP und unnötige Netzwerkdienste geblockt
+
+RDP + NLA korrekt implementiert
+
+PowerShell abgesichert
+
+Tests & Validierung abgeschlossen
+
+
+Mein Windows-Client verhält sich nun wie ein echter Firmen-Client innerhalb einer gesicherten Unternehmensdomäne.
