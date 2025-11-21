@@ -1,0 +1,132 @@
+1. Zielsetzung
+
+Ich wollte verstehen, wie Nmap zur Netzwerkaufklärung genutzt wird, welche Ports auf meinen Systemen offen sind und wie ein Pentester anhand dieser Ports mögliche Angriffe abschätzt.
+
+
+---
+
+2. Host Discovery (Ping-Scan)
+
+Ich habe zuerst das komplette Subnetz gescannt:
+
+nmap -sn 10.0.0.0/24
+
+Gefundene Systeme:
+
+10.0.0.1 → virtuelle Bridge
+
+10.0.0.10 → Windows Client
+
+10.0.0.20 → Domain Controller
+
+10.0.0.30 → Kali Linux
+
+
+Damit war das Lab-Netz vollständig sichtbar.
+
+
+---
+
+3. Initialer Portscan
+
+Als nächstes habe ich die wichtigsten Ports des Windows-Clients gescannt:
+
+nmap -sV 10.0.0.10
+
+Ergebnis (anfangs):
+
+445/tcp open (SMB)
+
+
+Alle anderen Ports waren geblockt → Standard Windows-Firewall.
+
+
+---
+
+4. Vollständiger Portscan (alle Ports 1–65535)
+
+nmap -p- 10.0.0.10
+
+Beim zweiten Scan tauchten plötzlich neue Ports auf:
+
+135/tcp open → RPC Endpoint Mapper
+
+5040/tcp open → Windows-Dienst
+
+
+Das zeigt:
+
+Windows-Clients öffnen dynamisch Ports
+
+Dienste können sich ändern
+
+Portscans sind Momentaufnahmen
+
+
+
+---
+
+5. Bewertung der Ports
+
+Port 445 – SMB
+
+ermöglicht Datei-Freigaben
+
+wichtig für Windows-Authentifizierung
+
+relevant für: Pass-the-Hash, psexec, Lateral Movement
+
+
+Port 135 – RPC
+
+öffnet Remote Procedure Calls
+
+wichtig für WMI & DCOM
+
+ermöglicht diverse Remote-Abfragen und Angriffe
+
+
+Port 5040
+
+unspektakulärer Windows-Hintergrunddienst
+
+zeigt nur an, dass der Client aktiv ist
+
+
+
+---
+
+6. Bedeutung für Pentests
+
+Durch Nmap habe ich verstanden:
+
+welche Dienste einsatzbereit sind
+
+ob Remoteverwaltung möglich wäre
+
+ob SMB- oder RPC-basierte Angriffe denkbar sind
+
+wie Firewalls Ports blockieren oder freigeben
+
+
+Ein Pentest beginnt immer mit Nmap, da man ohne Port-Informationen blind ist.
+
+
+---
+
+7. Fazit
+
+Mit Nmap konnte ich erfolgreich:
+
+mein gesamtes Lab scannen
+
+Hosts identifizieren
+
+offene Ports analysieren
+
+Windows-Client-Verhalten bewerten
+
+potenzielle Angriffspfade erkennen
+
+
+Nmap ist damit ein fundamentales Werkzeug für Recon, Informationsbeschaffung und die Vorbereitung eines Angriffs – aber es ersetzt keinen Angriff selbst.
