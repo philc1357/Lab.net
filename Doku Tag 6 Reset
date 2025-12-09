@@ -49,3 +49,26 @@ Server zum DC hochgestuft:
 
 Test: 
 Nach reboot Server-Manager geöffnet
+->Tools ->AD Domänen und Vertrauensstellen
+la.local wird angezeigt.
+Alles funktioniert.
+
+
+
+AD Struktur anlegen
+Als erstes erstellen wir eine grobe Struktur
+-ServerManager -> Tools -> AD Benutzer und Computer
+rechtsklick auf lab.local -> neu -> Organisationseinheit:
+LAB-USERS
+ - LAB-Admins
+ - LAB-Employees
+ - LAB-Praktika
+LAB-Groups
+(alles Organisationseinheiten)
+
+
+in LAB-Groups wird eine neue Gruppe. angelegt:
+GRP_Admin
+GRP_Employees
+GRP_Praktika
+
