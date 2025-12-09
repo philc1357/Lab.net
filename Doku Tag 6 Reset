@@ -1,6 +1,8 @@
 Heute habe ich das Lab net erneut von 0 aufgebaut zur Wiederholung. Ebenfalls habe ich dadurch das Hardening rückgängig gemacht um weiterhin Angruffe durchzuführen.
 Desweiteren habe ich einen Ubunutu Server dem Lab hinzugefügt um Webangriffe zu verstehen.
 
+-----
+
 Neues Lab:
 
 Windows Server Evaluation 22 als DC
@@ -22,6 +24,7 @@ Ubuntu Server als Webserver
 - MySQL-Datenbank firma mit Tabelle contact_form erstellt.
 - index.php in /var/www/html erstellt die ein kleines Kontaktformular enthält, welches in die Datanbank eingefügt wird.
 
+-----
 
 Danach habe ich von allen Geräten eine Ping Abfrage zu allen Geräten gemacht.
 Ergebnis:
@@ -33,6 +36,7 @@ ICMPv4 Regel erlauben in der Firewall.
 Ergebnis:
 Ubuntu und Kali finden den Win Client
 
+-----
 
 Als nächstes Habe ich den Windows Server PC umbenannt in DC01 um ihn als Domain Controller zu identifizieren. -> Neustart.
 
@@ -53,7 +57,7 @@ Nach reboot Server-Manager geöffnet
 la.local wird angezeigt.
 Alles funktioniert.
 
-
+-----
 
 AD Struktur anlegen
 Als erstes erstellen wir eine grobe Struktur
