@@ -17,6 +17,7 @@ Windows 10 Client
 Ubuntu Server als Webserver
 - 10.0.0.40 als IP
 
+
 Danach habe ich von allen Geräten eine Ping Abfrage zu allen Geräten gemacht.
 Ergebnis:
 Ubuntu und Kali finden keinen Win Client.
@@ -26,4 +27,11 @@ ICMPv4 Regel erlauben in der Firewall.
 
 Ergebnis:
 Ubuntu und Kali finden den Win Client
+
+
+Als nächstes Habe ich den Windows Server PC umbenannt in DC01 um ihn als Domain Controller zu identifizieren. -> Neustart.
+
+
+Danach habe ich im Server Manager die Active Directory Features hinzugefügt. -> Neustart.
+
 
