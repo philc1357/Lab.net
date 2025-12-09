@@ -37,6 +37,15 @@ Ubuntu und Kali finden den Win Client
 Als nächstes Habe ich den Windows Server PC umbenannt in DC01 um ihn als Domain Controller zu identifizieren. -> Neustart.
 
 
-Danach habe ich im Server Manager die Active Directory Features hinzugefügt. -> Neustart.
+Danach habe ich im Server Manager die Active Directory Features hinzugefügt.
 
 
+Server zum DC hochgestuft:
+- Neue Gesamtstruktur hinzufügen
+- Stammdomäne: lab.local
+- Kennwort zur Wiederherstellung
+- Installieren
+- Reboot
+
+Test: 
+Nach reboot Server-Manager geöffnet
