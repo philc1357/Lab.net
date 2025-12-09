@@ -16,3 +16,14 @@ Windows 10 Client
 
 Ubuntu Server als Webserver
 - 10.0.0.40 als IP
+
+Danach habe ich von allen Geräten eine Ping Abfrage zu allen Geräten gemacht.
+Ergebnis:
+Ubuntu und Kali finden keinen Win Client.
+
+Lösung:
+ICMPv4 Regel erlauben in der Firewall.
+
+Ergebnis:
+Ubuntu und Kali finden den Win Client
+
