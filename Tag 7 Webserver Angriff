@@ -1,0 +1,150 @@
+1. Server-Infrastruktur eingerichtet
+
+Im Cyber-Lab wurde ein neuer Linux-Server (Ubuntu Server) mit der festen IP:
+10.0.0.40
+erstellt. Dieser Server dient als Web-, Datenbank- und FTP-Host.
+
+Installierte Dienste:
+
+Apache (Webserver)
+
+MariaDB/MySQL (Datenbank)
+
+PHP (für Webformular)
+
+vsftpd (FTP-Server)
+
+
+Installation erfolgte über:
+
+sudo apt update
+sudo apt install apache2 mariadb-server php php-mysql vsftpd
+
+Alle Dienste wurden aktiviert und gestartet.
+
+
+---
+
+2. Datenbank & Tabelle angelegt
+
+In MariaDB wurde eine Test-Datenbank firma erstellt mit der Tabelle contact_form, um ein Kontaktformular zu simulieren:
+
+CREATE DATABASE firma;
+USE firma;
+
+CREATE TABLE contact_form (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    email VARCHAR(255),
+    message TEXT,
+    date DATETIME
+);
+
+Beispieldaten wurden eingetragen, damit Inhalte später sichtbar sind.
+
+
+---
+
+3. Simples Kontaktformular erstellt
+
+Unter /var/www/html/index.php wurde eine einfache PHP-Webseite angelegt, die Formulardaten in die Datenbank schreibt.
+
+<form ...> … </form>
+<?php
+    // Speichert Formulareinträge in der DB
+?>
+
+Der Windows-Client (10.0.0.10) konnte die Seite erreichen und erfolgreich Einträge absenden.
+
+
+---
+
+4. FTP-Server eingerichtet
+
+Da vsftpd standardmäßig Schreibzugriffe blockiert, wurde ein eigener FTP-Benutzer angelegt und Rechte auf das Webverzeichnis vergeben.
+
+Benutzer erstellt: ftpuser
+
+Rechte gesetzt:
+
+
+sudo chown -R ftpuser:ftpuser /var/www/html
+sudo chmod -R 777 /var/www/html   # bewusst unsicher für Demo
+
+vsftpd wurde in einen einfachen, absichtlich unsicheren Modus gesetzt, um Demonstrationen zu ermöglichen.
+
+Der Kali-Angreifer (10.0.0.30) konnte daraufhin:
+
+ftp 10.0.0.40
+get index.php
+
+→ Der gesamte Website-Quellcode war sichtbar und herunterladbar.
+
+
+---
+
+5. Verhalten von MySQL
+
+Im Gegensatz zu FTP verhielt sich MySQL sicher:
+
+REMOTE-Login wurde blockiert.
+
+Grund: Moderne MySQL-/MariaDB-Versionen erlauben standardmäßig keine externen Verbindungen für den Benutzer root und binden den Datenbankdienst an:
+
+127.0.0.1  → nur lokal zugänglich
+
+Das verhindert:
+
+externe Logins
+
+direkte Datenbankauslese
+
+Remote-Attacken auf root
+
+
+Der Versuch:
+
+mysql -h 10.0.0.40 -u root
+
+→ wurde von der Sicherheitskonfiguration blockiert.
+
+Dies zeigt:
+MySQL ist standardmäßig sicherer als FTP, weil es bewusst Netzattacken erschwert.
+
+
+---
+
+6. Ergebnis der Demonstration
+
+FTP → unsicher
+
+Download / Upload von Dateien ohne Einschränkung
+
+kompletter Zugriff auf die Website
+
+Manipulation der Website-Dateien möglich
+
+zeigt sehr deutlich, wie gefährlich FTP ohne Absicherung ist
+
+
+MySQL → sicher
+
+verweigert externe Verbindungen
+
+schützt Datenbank-Inhalte standardmäßig
+
+verhindert direkten Zugriff auf Kundendaten
+
+
+
+---
+
+Fazit
+
+Das Szenario zeigt sehr eindrucksvoll:
+
+FTP ist eines der unsichersten Protokolle in der IT, und ohne korrekte Rechte kann jeder Dateien sehen, kopieren und verändern.
+
+MySQL blockiert standardmäßig remote root-Zugriffe, was eine wichtige Sicherheitsmaßnahme gegen Angriffe ist.
+
+Der Vergleich zeigt, wie wichtig richtige Konfiguration und Absicherung ist, selbst in internen Netzen.
