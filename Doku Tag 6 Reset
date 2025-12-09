@@ -1,0 +1,18 @@
+Heute habe ich das Lab net erneut von 0 aufgebaut zur Wiederholung. Ebenfalls habe ich dadurch das Hardening rückgängig gemacht um weiterhin Angruffe durchzuführen.
+
+Neues Lab:
+
+Windows Server Evaluation 22 als DC
+- 10.0.0.20/24 als IP
+- 10.0.0.20 als DNS
+
+KALI Linux als Angreifer
+- 10.0.0.30/24 als IP
+- 10.0.0.20 als DNS
+
+Windows 10 Client
+- 10.0.0.10/24 als IP
+- 10.0.0.20 als DNS
+
+Ubuntu Server als Webserver
+- 10.0.0.40 als IP
