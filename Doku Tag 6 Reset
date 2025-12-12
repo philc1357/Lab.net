@@ -71,8 +71,53 @@ LAB-Groups
 (alles Organisationseinheiten)
 
 
-in LAB-Groups wird eine neue Gruppe. angelegt:
+in LAB-Groups wwerden neue Gruppen angelegt:
 GRP_Admin
 GRP_Employees
 GRP_Praktika
 
+
+-----
+
+in Jeder Gruppe wird jeweils 1 Benutzer erstellt:
+LAB-Admins: Aaron-> Mitglied von Domänen-Admins und GRP_Admin
+
+LAB-Employees: Levin-> Mitglied von GRP_Employees
+
+LAB-Praktika: Xenia-> Mitglied von GRP_Praktika - unsicheres Passwort.
+
+
+-----
+Im DC einen Ordner erstellt:
+C:/share/Data
+
+Eigenschaften-Freigabe-erweiterte Freigabe-Berechtigungen:
+GRP_Employees - Ändern, Lesen
+GRP_Praktika - Lesen
+
+Eigenschaften-Sicherheit:
+GRP_Employees, GRP_Praktika hinzugefügt und die gleichen Rechte verteilt.
+
+
+-----
+Nun wollte ich mich auf dem Win Client Als ein Domänenbenutzer einloggen, sah aber dass ich mich mit keinem Nutzer anmelden konnte.
+
+Fehler: sysdm.cpl geöffnet und da konnte ich sehen dass der Client nur Mitglied der Arbeitsgruppe ist, nicht aber der Domäne.
+also habe ich ihn manuell der Domäne lab.local hinzugefügt und konnte mich anschließend mit Domänenbenutzer anmelden.
+
+Da Levin in der Gruppe GRP_Employees ist wechselte ich mit "Windows+R" zu "\\10.0.0.20\Data". Hier erstelle ich einen Ordner "Test/Employee". 
+Erfebnis: Erfolgreich, wie erwartet
+
+Das gleiche teste ich nun mit dem Benutzer Xenia.
+Problem: Beim Einloggen soll Xenia ein neues Passwort bekommen welches zu Testzwecken sehr schwach sein soll. Die Domänenrichtlinien verhindern ein unsicheres Passwort:
+
+Also müssen wir die Passwortrichtlinien anpassen.
+
+Auf DC:
+Server-Manager->Tools->AD-Verwaltingscenter
+
+Links auf lab.local Pfeil dann:
+System->Password Settings Container->Neu
+Die Einstellungen sind zu finden auf dem Bild "pwd_GRP_Praktika.png"
+
+Die Einstellungen wurden nur auf die Gruppe GRP_Praktika angewandt.
