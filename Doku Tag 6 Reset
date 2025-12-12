@@ -123,3 +123,8 @@ Die Einstellungen sind zu finden auf dem Bild "pwd_GRP_Praktika.png"
 Die Einstellungen wurden nur auf die Gruppe GRP_Praktika angewandt.
 
 Jetzt kann Xenia ein extrem unsicheres Passwort bekommen welches nie abläuft.
+
+Nun kann ich mit Xenia in den Ordner \\C:\Data
+
+Ergebnis:
+Hier kann Xenia keine Ordner erstellen aber den bereits vorhandenen Ordner öffnen. Wie erwartet.
