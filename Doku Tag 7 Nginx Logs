@@ -86,3 +86,19 @@ Ich habe gelernt, wie man Logs live beobachtet (tail -f) und so Aktionen am Clie
 Ich habe verstanden, dass ein Seitenaufruf mehrere Requests auslöst (z. B. index.php + automatisch favicon.ico) und dass ein 404 bei favicon.ico meist harmlos ist.
 
 Ich habe als Sysadmin-Aha mitgenommen, dass ohne laufenden Domain Controller typische Domänenfunktionen wie Benutzerwechsel/Anmeldung nicht normal funktionieren.
+
+
+
+-----
+Ich habe in der index.php folgende Teile hinzugefügt:
+<script src="script.js"></script>
+
+In der script.js steht folgendes:
+alert("Hi")
+
+Nun aktualisiere ich die Seite und sehe dass script.js funktioniert und in den access.log 3 Requests gemacht wurden.
+10.0.0.10 GET index.php 200
+10.0.0.10 GET /script.js 200
+10.0.0.10 GET /favicon.ico 404 "http://10.0.0.10/index.php
+
+Was ist neu? Die dritte Zeile die jetzt einen Referer hat. nämlich die index.php weil script.js von der index.php aus geladen wird.
