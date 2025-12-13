@@ -75,12 +75,14 @@ Inhalt wird komprimiert übertragen und vom Browser entpackt. Spart Bandbreite u
 Server: nginx/1.24.0 (Ubuntu)
 Das verrät Software + Version + OS-Hinweis. Fürs Debuggen nett, aber aus Security-Sicht oft “zu viel Info”, weil Angreifer Versionen lieben. In echten Umgebungen versteckt man das häufig (z. B. weniger genaue Server-Banner).
 
+-----
 Was habe ich bis hierhin gelernt?
-Server Logs sind oft ungenauer als Dev Tools. Um wirklich klare Details im Server log zu finden reicht es oft nicht die normalen Logs zu durchsuchen.
-Ich habe heute Dev Tool zum ersten mal fürs logging genutzt und gemerkt wie mächtig dieses Tool ist.
+Ich habe gelernt, dass Browser-DevTools die Client-Sicht extrem detailliert zeigen (jede einzelne Anfrage inkl. Header) und damit helfen, Server-Log-Einträge zu verstehen und zuzuordnen.
 
-Ich habe gelernt dass error.log nur fehlgeschlagenen Verbindungen anzeigt und access.log deutlich aussagekräftiger ist für Zugriffe und slowhttptests
+Ich habe gelernt, dass die Standard-Server-Logs oft nur eine Zusammenfassung enthalten und man für echte Details (Header/Timing) Logging gezielt erweitern muss.
 
-Ich habe gelernt wie man Live Server Logs anzeigt.
+Ich habe gelernt, wie man Logs live beobachtet (tail -f) und so Aktionen am Client (F5/Strg+F5) direkt im Log wiederfindet.
 
-Ein weiterer kleiner aber eigentlich logischer "Aha-Momemt" erlebte ich als ich sah dass ich mit ausgeschaltetem DC nicht den Benutzer auf dem Win Client wechseln kann.
+Ich habe verstanden, dass ein Seitenaufruf mehrere Requests auslöst (z. B. index.php + automatisch favicon.ico) und dass ein 404 bei favicon.ico meist harmlos ist.
+
+Ich habe als Sysadmin-Aha mitgenommen, dass ohne laufenden Domain Controller typische Domänenfunktionen wie Benutzerwechsel/Anmeldung nicht normal funktionieren.
