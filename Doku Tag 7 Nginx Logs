@@ -46,4 +46,31 @@ Anschließend aktualisierte ich die Seite mit F5 und bekomme die selben Logs. Al
 
 Der Client versuchte hier das Icon zu holen welches nicht vorhanden ist. Deshalb auch der Fehlercode 404. Trotz 404 wird die Seite Lice angezeigt.
 
-Dies kann man zusätzlich in den Browser Tools sehen.
+Dies kann man zusätzlich in den Browser Tools sehen. Man sieht hier 2 Requests.
+10.0.0.10 GET /Index.php 200 174
+10.0.0.10 GET /favicon.ico 404 192
+Die index.php wurde erfolgreich geladen und das favicon.ico fehlt.
+
+Das selbe können wir auch in den Server Logs sehen. Dazu nehme ich folgenden Befehl:
+sudo tail -f /var/log/nginx/access.log | grep "10.0.0.10"
+
+Wir könnten den Fehlercode 404 beheben indem wir ein favicon.ico anlegen unter /var/www/html/favicon.ico mit dem Befehl
+sudo touch /var/www/html/favicon.ico
+
+Um noch einen Schritt weiter zu gehen sehe ich mir in den Browser Tools die Details im Header zum Request index.php an.
+Hier sehe ich ähnliche aber mehr Details als vorher.
+
+Es wurde http://10.0.0.40/Index.php per GET aufgerufen.
+
+Genutzt wurde der Port 80.
+
+Status Code 200 -> Seite wurde geladen.
+
+Connection: keep-alive
+Der Server sagt: “Wir können die TCP-Verbindung offen lassen, damit du weitere Requests schneller schicken kannst.” Praktisch, weil eine Seite meist mehrere Requests auslöst (wie ich bei favicon.ico gesehen habe).
+
+Content-Encoding: gzip
+Inhalt wird komprimiert übertragen und vom Browser entpackt. Spart Bandbreite und ist normal.
+
+Server: nginx/1.24.0 (Ubuntu)
+Das verrät Software + Version + OS-Hinweis. Fürs Debuggen nett, aber aus Security-Sicht oft “zu viel Info”, weil Angreifer Versionen lieben. In echten Umgebungen versteckt man das häufig (z. B. weniger genaue Server-Banner).
