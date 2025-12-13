@@ -104,3 +104,18 @@ Nun aktualisiere ich die Seite und sehe dass script.js funktioniert und in den a
 Was ist neu? Die dritte Zeile die jetzt einen Referer hat. nämlich die index.php weil script.js von der index.php aus geladen wird.
 
 Das gleiche sehe ich auch in den Dev Tools. hier ist ein neuer Request für die script.js vorhanden der Initiator ist index.php.
+
+-----
+Im nächsten Schritt habe ich in der script.js
+eine unsichere Funktion eingebaut:
+function ausgabe(variable){
+    alert(variable);
+}
+
+Nach dem Neuladencder Seite sehe ich in den Dev Tools unter Quellen den Code der script.js sehen. Dort ist ersichtlich dass die Funktion einfach über die Konsole ausführbar ist. In der Konsole habe ich eingebgeben:
+ausgabe("Sie wurden gehackt")
+
+Ergebniss:
+Auf der Seite wird nun genau dieser Alert agezeigt. "Sie wurden gehackt"
+
+Erster Gedanke: Funktionen müssen irgendwie verschlüsselt werden oder Übergabeparameter irgendwie vorher sicher deklariert werden.
