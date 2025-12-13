@@ -102,3 +102,5 @@ Nun aktualisiere ich die Seite und sehe dass script.js funktioniert und in den a
 10.0.0.10 GET /favicon.ico 404 "http://10.0.0.10/index.php
 
 Was ist neu? Die dritte Zeile die jetzt einen Referer hat. nämlich die index.php weil script.js von der index.php aus geladen wird.
+
+Das gleiche sehe ich auch in den Dev Tools. hier ist ein neuer Request für die script.js vorhanden der Initiator ist index.php.
