@@ -1,0 +1,49 @@
+Heute wollte ich Server logs nach eine Zugriff auf den Ubuntu Server untersuchen.
+
+-----
+Als erstes definiere ich die wichtigsten Log Befehle:
+
+sudo tail -n 20 /var/log/nginx/access.log
+zeigt die letzten 20 erfolgreichen Verbindungen an
+
+sudo tail -n 30 /var/log/nginx/error.log
+zeigt die letzten 20 fehlgeschlagenen Vernindungen an
+an
+
+sudo tail -f /var/log/nginx/access.log
+Zeigt die Live Ausgabe erfolgreicher Verbindungen an
+an
+
+sudo less /var/log/nginx/access.log
+zeigt erfolgreiche Verbindungen mit less an
+an
+
+sudo grep "10.0.0.10" /var/log/nginx/access.log | tail -n 20
+wurd genutzt um eine IP zu suchen deren Verbindung erfolgreich war
+war
+
+sudo grep ' 404 ' /var/log/nginx/access.log | tail -n 20
+zeigt nur 404 Verbindungen an.
+
+sudo journalctl -u nginx -n 50 --no-pager
+Nginx Status
+
+-----
+Nun starte ich den Praxistest und gebe auf dem Ubuntu Server folgenden Befehl ein um die Live Ausgabe der erfolgreichen Verbindungen zu sehen:
+sudo tail -f /var/log/nginx/access.log
+
+Ich rufe auf 10.0.0.10 im Browser die IP 10.0.0.40 auf.
+
+Ergebnis der Server Logs:
+Ich sehe einen erfolgreichen Request
+10.0.0.10 - - [13/Dec/2025:11:40:11 +0000] "GET / HTTP/1.1" 200 174 "-" "Mozilla/5.0 (Windows T 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 Edg/92.0.902.67"
+
+Analyse:
+10.0.0.10 hat zum Zeitsptempel die Hauptseite angefragt. Sie wurde erfolgreich per 200 zurückgegeben und ist 174 Bytes groß.
+"-" ist der Referer. heißt: kein Referer mitgeschickt. Nicht immer wichtig, aber manchmal nützlich (z. B. um zu sehen, ob Klicks von einer anderen Seite kommen).
+
+Anschließend aktualisierte ich die Seite mit F5 und bekomme die selben Logs. Als ich jedoch STRG + F5 Drückte sah ich auf dem Ubuntu Server eine Zeile mit dem Fehlercode 404 und GET /favicon.ico
+
+Der Client versuchte hier das Icon zu holen welches nicht vorhanden ist. Deshalb auch der Fehlercode 404. Trotz 404 wird die Seite Lice angezeigt.
+
+Dies kann man zusätzlich in den Browser Tools sehen.
