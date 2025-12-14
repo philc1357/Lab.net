@@ -112,7 +112,7 @@ function ausgabe(variable){
     alert(variable);
 }
 
-Nach dem Neuladencder Seite sehe ich in den Dev Tools unter Quellen den Code der script.js sehen. Dort ist ersichtlich dass die Funktion einfach über die Konsole ausführbar ist. In der Konsole habe ich eingebgeben:
+Nach dem Neuladen der Seite sehe ich in den Dev Tools unter Quellen den Code der script.js sehen. Dort ist ersichtlich dass die Funktion einfach über die Konsole ausführbar ist. In der Konsole habe ich eingebgeben:
 ausgabe("Sie wurden gehackt")
 
 Ergebniss:
